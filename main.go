@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	cipher, err := transposition.CipherByColumns("thejewelsarehiddenbeneaththeelmtree", 2)
+	cipher, err := transposition.Cipher("thejewelsarehiddenbeneaththeelmtree", 2)
 	if err != nil {
 		log.Fatal(err)
 	}
