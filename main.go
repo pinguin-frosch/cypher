@@ -1,15 +1,25 @@
 package main
 
 import (
+	"bufio"
 	"cypher/transposition"
 	"fmt"
-	"log"
+	"os"
+	"strings"
 )
 
 func main() {
-	cipher, err := transposition.Cipher("thejewelsarehiddenbeneaththeelmtree", 2)
-	if err != nil {
-		log.Fatal(err)
+	scanner := bufio.NewScanner(os.Stdin)
+	fmt.Print(">> ")
+	for scanner.Scan() {
+		text := strings.Trim(scanner.Text(), " ")
+		text = strings.ToLower(text)
+		switch text {
+		case "b":
+			fmt.Print("Message: ")
+			scanner.Scan()
+			transposition.BruteForceDecipher(scanner.Text())
+		}
+		fmt.Print(">> ")
 	}
-	fmt.Println(cipher)
 }
