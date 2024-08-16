@@ -11,8 +11,8 @@ import (
 type Menu struct {
 	Prompt  string
 	Options map[string]Option
-	Active  bool
-	scanner *bufio.Scanner
+	active  bool
+	Scanner *bufio.Scanner
 }
 
 type Option struct {
@@ -38,19 +38,19 @@ func (m *Menu) ShowOptions() {
 }
 
 func (m *Menu) Start() {
-	m.Active = true
+	m.active = true
 	fmt.Println("Press ? to show options")
-	fmt.Printf("[%s] >> ", m.Prompt)
-	for m.scanner.Scan() {
-		text := strings.Trim(m.scanner.Text(), " ")
+	fmt.Printf("\n[%s] >> ", m.Prompt)
+	for m.Scanner.Scan() {
+		text := strings.Trim(m.Scanner.Text(), " ")
 		text = strings.ToLower(text)
 		if option, ok := m.Options[text]; ok {
 			option.Function()
 		}
-		if !m.Active {
+		if !m.active {
 			break
 		}
-		fmt.Printf("[%s] >> ", m.Prompt)
+		fmt.Printf("\n[%s] >> ", m.Prompt)
 	}
 }
 
@@ -62,8 +62,8 @@ func NewMenu(prompt string) *Menu {
 		m.ShowOptions()
 	})
 	m.AddOption("x", "close menu", func() {
-		m.Active = false
+		m.active = false
 	})
-	m.scanner = bufio.NewScanner(os.Stdin)
+	m.Scanner = bufio.NewScanner(os.Stdin)
 	return &m
 }
