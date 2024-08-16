@@ -9,4 +9,7 @@ func init() {
 	MainMenu.AddOption("t", "transposition sub menu", func() {
 		TranspositionMenu.Start()
 	})
+	MainMenu.AddOption("m", "monosubstitution sub menu", func() {
+		MonoSubstitutionMenu.Start()
+	})
 }
