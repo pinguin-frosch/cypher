@@ -28,4 +28,36 @@ func init() {
 			fmt.Printf("%c: %.2f%%\n", c, freq.Percentage)
 		}
 	})
+	MonoSubstitutionMenu.AddOption("r", "add letter replacement", func() {
+		scanner := TranspositionMenu.Scanner
+		fmt.Print("from: ")
+		scanner.Scan()
+		runes := []rune(scanner.Text())
+		if len(runes) != 1 {
+			fmt.Println("invalid char")
+		}
+		from := runes[0]
+		fmt.Print("to: ")
+		scanner.Scan()
+		runes = []rune(scanner.Text())
+		if len(runes) != 1 {
+			fmt.Println("invalid char")
+		}
+		to := runes[0]
+		monoSubstitutionState.AddLetterReplacement(from, to)
+	})
+	MonoSubstitutionMenu.AddOption("p", "print text with replacements", func() {
+		text := monoSubstitutionState.GetReplacedText()
+		fmt.Printf("text: %s\n", text)
+	})
+	MonoSubstitutionMenu.AddOption("s", "show letter replacements", func() {
+		replacements := monoSubstitutionState.GetLetterReplacements()
+		for from, to := range replacements {
+			fmt.Printf("%s -> %s\n", string(from), string(to))
+		}
+	})
+	MonoSubstitutionMenu.AddOption("t", "print input text", func() {
+		text := monoSubstitutionState.GetInputText()
+		fmt.Printf("text: %s\n", text)
+	})
 }

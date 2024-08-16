@@ -1,17 +1,20 @@
 package monosubstitution
 
 import (
+	"strings"
 	"unicode"
 )
 
 type State struct {
-	input       string
-	frequencies map[rune]letterFrequency
+	input        string
+	replacements map[rune]rune
+	frequencies  map[rune]letterFrequency
 }
 
 func NewState() *State {
 	s := State{}
 	s.frequencies = make(map[rune]letterFrequency)
+	s.replacements = make(map[rune]rune)
 	return &s
 }
 
@@ -21,7 +24,28 @@ func (s *State) AddInputText(input string) {
 	s.analizeFrequencies()
 }
 
+func (s *State) GetReplacedText() string {
+	text := s.input
+	for from, to := range s.replacements {
+		text = strings.ReplaceAll(text, string(from), string(to))
+	}
+	return text
+}
+
+func (s *State) GetInputText() string {
+	return s.input
+}
+
+func (s *State) AddLetterReplacement(from, to rune) {
+	s.replacements[from] = to
+}
+
+func (s *State) GetLetterReplacements() map[rune]rune {
+	return s.replacements
+}
+
 func (s *State) reset() {
+	clear(s.replacements)
 	clear(s.frequencies)
 }
 
