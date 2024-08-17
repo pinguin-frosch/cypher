@@ -51,9 +51,9 @@ func init() {
 		fmt.Printf("text: %s\n", text)
 	})
 	MonoSubstitutionMenu.AddOption("s", "show letter replacements", func() {
-		replacements := monoSubstitutionState.GetLetterReplacements()
-		for from, to := range replacements {
-			fmt.Printf("%s -> %s\n", string(from), string(to))
+		replacements, keys := monoSubstitutionState.GetLetterReplacements()
+		for _, key := range keys {
+			fmt.Printf("%s -> %s\n", string(key), string(replacements[key]))
 		}
 	})
 	MonoSubstitutionMenu.AddOption("t", "print input text", func() {

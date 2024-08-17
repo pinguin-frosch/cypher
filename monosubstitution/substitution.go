@@ -1,6 +1,7 @@
 package monosubstitution
 
 import (
+	"sort"
 	"strings"
 	"unicode"
 )
@@ -40,8 +41,15 @@ func (s *State) AddLetterReplacement(from, to rune) {
 	s.replacements[from] = to
 }
 
-func (s *State) GetLetterReplacements() map[rune]rune {
-	return s.replacements
+func (s *State) GetLetterReplacements() (map[rune]rune, []rune) {
+	keys := make([]rune, 0, len(s.replacements))
+	for key := range s.replacements {
+		keys = append(keys, key)
+	}
+	sort.Slice(keys, func(i, j int) bool {
+		return s.replacements[keys[i]] < s.replacements[keys[j]]
+	})
+	return s.replacements, keys
 }
 
 func (s *State) reset() {
