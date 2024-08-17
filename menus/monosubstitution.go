@@ -19,13 +19,13 @@ func init() {
 		monoSubstitutionState.AddInputText(scanner.Text())
 	})
 	MonoSubstitutionMenu.AddOption("f", "show letter frequencies", func() {
-		frequencies := monoSubstitutionState.GetLetterFrequencies()
+		frequencies, keys := monoSubstitutionState.GetLetterFrequencies()
 		if len(frequencies) == 0 {
 			fmt.Println("no frequencies yet")
 			return
 		}
-		for c, freq := range frequencies {
-			fmt.Printf("%c: %.2f%%\n", c, freq.Percentage)
+		for _, key := range keys {
+			fmt.Printf("%c: %.2f%%\n", key, frequencies[key].Percentage)
 		}
 	})
 	MonoSubstitutionMenu.AddOption("r", "add letter replacement", func() {

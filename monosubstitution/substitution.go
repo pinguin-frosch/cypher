@@ -82,6 +82,13 @@ func (s *State) analizeFrequencies() {
 	}
 }
 
-func (s *State) GetLetterFrequencies() map[rune]letterFrequency {
-	return s.frequencies
+func (s *State) GetLetterFrequencies() (map[rune]letterFrequency, []rune) {
+	keys := make([]rune, 0, len(s.frequencies))
+	for key := range s.frequencies {
+		keys = append(keys, key)
+	}
+	sort.Slice(keys, func(i, j int) bool {
+		return s.frequencies[keys[i]].Times > s.frequencies[keys[j]].Times
+	})
+	return s.frequencies, keys
 }
