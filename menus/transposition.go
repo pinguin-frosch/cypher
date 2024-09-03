@@ -1,9 +1,9 @@
 package menus
 
 import (
-	"cypher/menu"
 	"cypher/transposition"
 	"fmt"
+	"github.com/pinguin-frosch/menu/pkg/menu"
 	"strconv"
 )
 

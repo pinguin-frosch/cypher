@@ -1,9 +1,9 @@
 package menus
 
 import (
-	"cypher/menu"
 	"cypher/monosubstitution"
 	"fmt"
+	"github.com/pinguin-frosch/menu/pkg/menu"
 )
 
 var MonoSubstitutionMenu *menu.Menu

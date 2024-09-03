@@ -1,6 +1,6 @@
 package menus
 
-import "cypher/menu"
+import "github.com/pinguin-frosch/menu/pkg/menu"
 
 var MainMenu *menu.Menu
 
