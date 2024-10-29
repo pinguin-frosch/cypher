@@ -1,6 +1,7 @@
 package monosubstitution
 
 import (
+	"errors"
 	"sort"
 	"strings"
 	"unicode"
@@ -10,12 +11,12 @@ type State struct {
 	input        string
 	cleanInput   string
 	replacements map[rune]rune
-	frequencies  map[rune]letterFrequency
+	frequencies  map[int]map[string]substringFrequency
 }
 
 func NewState() *State {
 	s := State{}
-	s.frequencies = make(map[rune]letterFrequency)
+	s.frequencies = make(map[int]map[string]substringFrequency)
 	s.replacements = make(map[rune]rune)
 	return &s
 }
@@ -24,7 +25,6 @@ func (s *State) AddInputText(input string) {
 	s.input = input
 	s.getCleanInput()
 	s.reset()
-	s.analizeFrequencies()
 }
 
 func (s *State) getCleanInput() {
@@ -69,35 +69,43 @@ func (s *State) reset() {
 	clear(s.frequencies)
 }
 
-type letterFrequency struct {
+type substringFrequency struct {
 	Times      int
-	Percentage float32
+	Percentage float64
 }
 
-func (s *State) analizeFrequencies() {
-	length := 0
-	for _, c := range s.cleanInput {
-		if freq, ok := s.frequencies[c]; ok {
-			freq.Times++
-			s.frequencies[c] = freq
-		} else {
-			s.frequencies[c] = letterFrequency{Times: 1}
+func (s *State) GetNFrecuencies(length int) (map[string]substringFrequency, error) {
+	if length <= 0 {
+		return nil, errors.New("invalid length")
+	}
+	if _, ok := s.frequencies[length]; !ok {
+		err := s.analizeNFrequencies(length)
+		if err != nil {
+			return nil, err
 		}
-		length++
 	}
-	for r, freq := range s.frequencies {
-		freq.Percentage = float32(freq.Times) / float32(length) * 100
-		s.frequencies[r] = freq
-	}
+	return s.frequencies[length], nil
 }
 
-func (s *State) GetLetterFrequencies() (map[rune]letterFrequency, []rune) {
-	keys := make([]rune, 0, len(s.frequencies))
-	for key := range s.frequencies {
-		keys = append(keys, key)
+func (s *State) analizeNFrequencies(length int) error {
+	if length <= 0 {
+		panic("invalid length")
 	}
-	sort.Slice(keys, func(i, j int) bool {
-		return s.frequencies[keys[i]].Times > s.frequencies[keys[j]].Times
-	})
-	return s.frequencies, keys
+	frequencies := make(map[string]substringFrequency)
+	for i := 0; i < len(s.cleanInput)-(length+1); i++ {
+		substring := s.cleanInput[i : i+length]
+		if f, ok := frequencies[substring]; ok {
+			f.Times++
+			frequencies[substring] = f
+		} else {
+			f := substringFrequency{Times: 1}
+			frequencies[substring] = f
+		}
+	}
+	for substring, f := range frequencies {
+		f.Percentage = float64(f.Times) / float64(len(s.cleanInput))
+		frequencies[substring] = f
+	}
+	s.frequencies[length] = frequencies
+	return nil
 }

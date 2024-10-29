@@ -3,6 +3,9 @@ package menus
 import (
 	"cypher/monosubstitution"
 	"fmt"
+	"maps"
+	"slices"
+
 	"github.com/pinguin-frosch/menu/pkg/menu"
 )
 
@@ -18,14 +21,37 @@ func init() {
 		scanner.Scan()
 		monoSubstitutionState.AddInputText(scanner.Text())
 	})
-	MonoSubstitutionMenu.AddOption("f", "show letter frequencies", func() {
-		frequencies, keys := monoSubstitutionState.GetLetterFrequencies()
-		if len(frequencies) == 0 {
-			fmt.Println("no frequencies yet")
+	MonoSubstitutionMenu.AddOption("n", "get n letter frequencies", func() {
+		n, err := MonoSubstitutionMenu.GetInt("length: ")
+		if err != nil {
+			fmt.Printf("error: %s\n", err.Error())
 			return
 		}
-		for _, key := range keys {
-			fmt.Printf("%c\t %d\t %.2f%%\n", key, frequencies[key].Times, frequencies[key].Percentage)
+		frequencies, err := monoSubstitutionState.GetNFrecuencies(n)
+		if err != nil {
+			fmt.Printf("error: %s\n", err.Error())
+			return
+		}
+		substrings := slices.Collect(maps.Keys(frequencies))
+		slices.SortFunc(substrings, func(a, b string) int {
+			if frequencies[a].Times < frequencies[b].Times {
+				return 1
+			} else if frequencies[a].Times > frequencies[b].Times {
+				return -1
+			}
+			if a < b {
+				return -1
+			} else if b > a {
+				return 1
+			}
+			return 0
+		})
+		for _, substring := range substrings {
+			f := frequencies[substring]
+			if f.Times == 1 {
+				continue
+			}
+			fmt.Printf("%s\t%d\t%.2f%%\n", substring, f.Times, f.Percentage*100)
 		}
 	})
 	MonoSubstitutionMenu.AddOption("r", "add letter replacement", func() {
