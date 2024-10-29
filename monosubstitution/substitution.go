@@ -8,6 +8,7 @@ import (
 
 type State struct {
 	input        string
+	cleanInput   string
 	replacements map[rune]rune
 	frequencies  map[rune]letterFrequency
 }
@@ -21,8 +22,19 @@ func NewState() *State {
 
 func (s *State) AddInputText(input string) {
 	s.input = input
+	s.getCleanInput()
 	s.reset()
 	s.analizeFrequencies()
+}
+
+func (s *State) getCleanInput() {
+	s.cleanInput = ""
+	for _, c := range s.input {
+		if unicode.IsSpace(c) || unicode.IsPunct(c) {
+			continue
+		}
+		s.cleanInput += string(c)
+	}
 }
 
 func (s *State) GetReplacedText() string {
@@ -64,15 +76,12 @@ type letterFrequency struct {
 
 func (s *State) analizeFrequencies() {
 	length := 0
-	for _, c := range s.input {
-		if unicode.IsSpace(c) || unicode.IsPunct(c) {
-			continue
-		}
+	for _, c := range s.cleanInput {
 		if freq, ok := s.frequencies[c]; ok {
 			freq.Times++
 			s.frequencies[c] = freq
 		} else {
-			s.frequencies[c] = letterFrequency{}
+			s.frequencies[c] = letterFrequency{Times: 1}
 		}
 		length++
 	}

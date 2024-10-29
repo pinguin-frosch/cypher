@@ -25,7 +25,7 @@ func init() {
 			return
 		}
 		for _, key := range keys {
-			fmt.Printf("%c: %.2f%%\n", key, frequencies[key].Percentage)
+			fmt.Printf("%c\t %d\t %.2f%%\n", key, frequencies[key].Times, frequencies[key].Percentage)
 		}
 	})
 	MonoSubstitutionMenu.AddOption("r", "add letter replacement", func() {
