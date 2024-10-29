@@ -16,10 +16,8 @@ func init() {
 	monoSubstitutionState = monosubstitution.NewState()
 	MonoSubstitutionMenu = menu.NewMenu("monosubstitution")
 	MonoSubstitutionMenu.AddOption("a", "add input text", func() {
-		scanner := TranspositionMenu.Scanner
-		fmt.Print("text: ")
-		scanner.Scan()
-		monoSubstitutionState.AddInputText(scanner.Text())
+		input := MonoSubstitutionMenu.GetString("text: ")
+		monoSubstitutionState.AddInputText(input)
 	})
 	MonoSubstitutionMenu.AddOption("n", "get n letter frequencies", func() {
 		n, err := MonoSubstitutionMenu.GetInt("length: ")
@@ -55,17 +53,12 @@ func init() {
 		}
 	})
 	MonoSubstitutionMenu.AddOption("r", "add letter replacement", func() {
-		scanner := TranspositionMenu.Scanner
-		fmt.Print("from: ")
-		scanner.Scan()
-		runes := []rune(scanner.Text())
+		runes := []rune(MonoSubstitutionMenu.GetString("from: "))
 		if len(runes) != 1 {
 			fmt.Println("invalid char")
 		}
 		from := runes[0]
-		fmt.Print("to: ")
-		scanner.Scan()
-		runes = []rune(scanner.Text())
+		runes = []rune(MonoSubstitutionMenu.GetString("to: "))
 		if len(runes) != 1 {
 			fmt.Println("invalid char")
 		}

@@ -3,8 +3,8 @@ package menus
 import (
 	"cypher/transposition"
 	"fmt"
+
 	"github.com/pinguin-frosch/menu/pkg/menu"
-	"strconv"
 )
 
 var TranspositionMenu *menu.Menu
@@ -12,20 +12,12 @@ var TranspositionMenu *menu.Menu
 func init() {
 	TranspositionMenu = menu.NewMenu("transposition")
 	TranspositionMenu.AddOption("b", "brute force decipher by columns", func() {
-		scanner := TranspositionMenu.Scanner
-		fmt.Print("message: ")
-		scanner.Scan()
-		transposition.BruteForceDecipher(scanner.Text())
+		message := TranspositionMenu.GetString("message: ")
+		transposition.BruteForceDecipher(message)
 	})
 	TranspositionMenu.AddOption("c", "cipher by columns", func() {
-		scanner := TranspositionMenu.Scanner
-		fmt.Print("text: ")
-		scanner.Scan()
-		input := scanner.Text()
-		fmt.Print("columns: ")
-		scanner.Scan()
-		columns := scanner.Text()
-		columnSize, err := strconv.Atoi(columns)
+		input := TranspositionMenu.GetString("text: ")
+		columnSize, err := TranspositionMenu.GetInt("columns: ")
 		if err != nil {
 			fmt.Println("error: invalid column size")
 			return
@@ -38,14 +30,8 @@ func init() {
 		fmt.Printf("cipher: %s\n", cipher)
 	})
 	TranspositionMenu.AddOption("d", "decipher by columns", func() {
-		scanner := TranspositionMenu.Scanner
-		fmt.Print("cipher: ")
-		scanner.Scan()
-		input := scanner.Text()
-		fmt.Print("columns: ")
-		scanner.Scan()
-		columns := scanner.Text()
-		columnSize, err := strconv.Atoi(columns)
+		input := TranspositionMenu.GetString("text: ")
+		columnSize, err := TranspositionMenu.GetInt("columns: ")
 		if err != nil {
 			fmt.Println("error: invalid column size")
 			return
