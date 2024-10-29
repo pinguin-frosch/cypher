@@ -50,6 +50,10 @@ func (s *State) GetInputText() string {
 }
 
 func (s *State) AddLetterReplacement(from, to rune) {
+	if from == to {
+		delete(s.replacements, from)
+		return
+	}
 	s.replacements[from] = to
 }
 
