@@ -12,20 +12,29 @@ import (
 var MonoSubstitutionMenu *menu.Menu
 var monoSubstitutionState *monosubstitution.State
 
+var ManualSubstitutionMenu *menu.Menu
+var ManualSubstitutionState *monosubstitution.State
+
 func init() {
-	monoSubstitutionState = monosubstitution.NewState()
 	MonoSubstitutionMenu = menu.NewMenu("monosubstitution")
-	MonoSubstitutionMenu.AddOption("a", "add input text", func() {
-		input := MonoSubstitutionMenu.GetString("text: ")
-		monoSubstitutionState.AddInputText(input)
+	MonoSubstitutionMenu.AddOption("m", "manual substitution", func() {
+		ManualSubstitutionMenu.Start()
 	})
-	MonoSubstitutionMenu.AddOption("n", "get n letter frequencies", func() {
-		n, err := MonoSubstitutionMenu.GetInt("length: ")
+
+	// TODO: move this menu definition somewhere else
+	ManualSubstitutionState = monosubstitution.NewState()
+	ManualSubstitutionMenu = menu.NewMenu("manual")
+	ManualSubstitutionMenu.AddOption("a", "add input text", func() {
+		input := ManualSubstitutionMenu.GetString("text: ")
+		ManualSubstitutionState.AddInputText(input)
+	})
+	ManualSubstitutionMenu.AddOption("n", "get n letter frequencies", func() {
+		n, err := ManualSubstitutionMenu.GetInt("length: ")
 		if err != nil {
 			fmt.Printf("error: %s\n", err.Error())
 			return
 		}
-		frequencies, err := monoSubstitutionState.GetNFrecuencies(n)
+		frequencies, err := ManualSubstitutionState.GetNFrecuencies(n)
 		if err != nil {
 			fmt.Printf("error: %s\n", err.Error())
 			return
@@ -52,31 +61,31 @@ func init() {
 			fmt.Printf("%s\t%d\t%.2f%%\n", substring, f.Times, f.Percentage*100)
 		}
 	})
-	MonoSubstitutionMenu.AddOption("r", "add letter replacement", func() {
-		runes := []rune(MonoSubstitutionMenu.GetString("from: "))
+	ManualSubstitutionMenu.AddOption("r", "add letter replacement", func() {
+		runes := []rune(ManualSubstitutionMenu.GetString("from: "))
 		if len(runes) != 1 {
 			fmt.Println("invalid char")
 		}
 		from := runes[0]
-		runes = []rune(MonoSubstitutionMenu.GetString("to: "))
+		runes = []rune(ManualSubstitutionMenu.GetString("to: "))
 		if len(runes) != 1 {
 			fmt.Println("invalid char")
 		}
 		to := runes[0]
-		monoSubstitutionState.AddLetterReplacement(from, to)
+		ManualSubstitutionState.AddLetterReplacement(from, to)
 	})
-	MonoSubstitutionMenu.AddOption("p", "print text with replacements", func() {
-		text := monoSubstitutionState.GetReplacedText()
+	ManualSubstitutionMenu.AddOption("p", "print text with replacements", func() {
+		text := ManualSubstitutionState.GetReplacedText()
 		fmt.Printf("text: %s\n", text)
 	})
-	MonoSubstitutionMenu.AddOption("s", "show letter replacements", func() {
-		replacements, keys := monoSubstitutionState.GetLetterReplacements()
+	ManualSubstitutionMenu.AddOption("s", "show letter replacements", func() {
+		replacements, keys := ManualSubstitutionState.GetLetterReplacements()
 		for _, key := range keys {
 			fmt.Printf("%s -> %s\n", string(key), string(replacements[key]))
 		}
 	})
-	MonoSubstitutionMenu.AddOption("t", "print input text", func() {
-		text := monoSubstitutionState.GetInputText()
+	ManualSubstitutionMenu.AddOption("t", "print input text", func() {
+		text := ManualSubstitutionState.GetInputText()
 		fmt.Printf("text: %s\n", text)
 	})
 }
