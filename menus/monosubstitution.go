@@ -2,6 +2,7 @@ package menus
 
 import (
 	"cypher/monosubstitution"
+	"cypher/monosubstitution/rot"
 	"fmt"
 	"maps"
 	"slices"
@@ -19,6 +20,34 @@ func init() {
 	MonoSubstitutionMenu = menu.NewMenu("monosubstitution")
 	MonoSubstitutionMenu.AddOption("m", "manual substitution", func() {
 		ManualSubstitutionMenu.Start()
+	})
+	MonoSubstitutionMenu.AddOption("rc", "cipher using rotary", func() {
+		text := MonoSubstitutionMenu.GetString("text: ")
+		amount, err := MonoSubstitutionMenu.GetInt("amount: ")
+		if err != nil {
+			fmt.Printf("err: %s\n", err.Error())
+			return
+		}
+		cipher, err := rot.Cipher(text, amount)
+		if err != nil {
+			fmt.Printf("err: %s\n", err.Error())
+			return
+		}
+		fmt.Printf("cipher: %s\n", cipher)
+	})
+	MonoSubstitutionMenu.AddOption("rd", "decipher using rotary", func() {
+		cipher := MonoSubstitutionMenu.GetString("cipher: ")
+		amount, err := MonoSubstitutionMenu.GetInt("amount: ")
+		if err != nil {
+			fmt.Printf("err: %s\n", err.Error())
+			return
+		}
+		text, err := rot.Decipher(cipher, amount)
+		if err != nil {
+			fmt.Printf("err: %s\n", err.Error())
+			return
+		}
+		fmt.Printf("text: %s\n", text)
 	})
 
 	// TODO: move this menu definition somewhere else
