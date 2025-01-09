@@ -1,6 +1,7 @@
 package vigenere
 
 import (
+	"cypher/utils"
 	"errors"
 	"log"
 	"strings"
@@ -25,7 +26,7 @@ func Cypher(text string, key string) (string, error) {
 
 	for _, char := range text {
 		// Keep non latin letters untouched
-		if !IsLatinLetter(char) {
+		if !utils.IsLatinLetter(char) {
 			cypher += string(char)
 			continue
 		}
@@ -43,37 +44,13 @@ func Cypher(text string, key string) (string, error) {
 	return cypher, nil
 }
 
-// Checks whether a letter is a latin letter or not
-func IsLatinLetter(letter rune) bool {
-	if (letter >= 65 && letter <= 90) || (letter >= 97 && letter <= 122) {
-		return true
-	}
-	return false
-}
-
-// Checks whether a letter is an uppercase latin letter
-func IsUppercaseLatinLetter(letter rune) bool {
-	if letter >= 65 && letter <= 90 {
-		return true
-	}
-	return false
-}
-
-// Checks whether a letter is a lowercase latin letter
-func IsLowercaseLatinLetter(letter rune) bool {
-	if letter >= 97 && letter <= 122 {
-		return true
-	}
-	return false
-}
-
 // Cyphers a single letter using the given key char, it is assumed that the
 // letters are latin letters and the key is in uppercase
 func cypherLetter(letter rune, keyChar rune) rune {
 	letterOffset := rune(0)
-	if IsLowercaseLatinLetter(letter) {
+	if utils.IsLowercaseLatinLetter(letter) {
 		letterOffset = 97
-	} else if IsUppercaseLatinLetter(letter) {
+	} else if utils.IsUppercaseLatinLetter(letter) {
 		letterOffset = 65
 	} else {
 		log.Fatalf("invalid letter: %v", letter)
@@ -87,7 +64,7 @@ func isValidKey(key string) error {
 		return errors.New("key cannot be empty")
 	}
 	for _, char := range key {
-		if !IsUppercaseLatinLetter(char) && !IsLowercaseLatinLetter(char) {
+		if !utils.IsUppercaseLatinLetter(char) && !utils.IsLowercaseLatinLetter(char) {
 			return errors.New("key contains invalid characters")
 		}
 	}
@@ -113,7 +90,7 @@ func Decypher(cypher string, key string) (string, error) {
 
 	for _, char := range cypher {
 		// Keep non latin letters untouched
-		if !IsLatinLetter(char) {
+		if !utils.IsLatinLetter(char) {
 			text += string(char)
 			continue
 		}
@@ -135,9 +112,9 @@ func Decypher(cypher string, key string) (string, error) {
 // letters are latin letters and the key is in uppercase
 func decypherLetter(letter rune, keyChar rune) rune {
 	letterOffset := rune(0)
-	if IsLowercaseLatinLetter(letter) {
+	if utils.IsLowercaseLatinLetter(letter) {
 		letterOffset = 97
-	} else if IsUppercaseLatinLetter(letter) {
+	} else if utils.IsUppercaseLatinLetter(letter) {
 		letterOffset = 65
 	} else {
 		log.Fatalf("invalid letter: %v", letter)
