@@ -35,3 +35,15 @@ func TestCypher(t *testing.T) {
 		t.Fatalf("Got: %v\n, Want: %v", result, expected)
 	}
 }
+
+func TestCypherAndDecypher(t *testing.T) {
+	// test that decyphering after cyphering yields the original text
+	text := "THE ORIGINAL mystery twins"
+	key := "whatever"
+	cypher, _ := vigenere.Cypher(text, key)
+	decypheredText, _ := vigenere.Decypher(cypher, key)
+
+	if text != decypheredText {
+		t.Fatalf("cypher followed by decypher generated the wrong output, got: %v, wanted: %v", decypheredText, text)
+	}
+}

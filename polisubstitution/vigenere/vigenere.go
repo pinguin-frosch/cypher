@@ -93,3 +93,58 @@ func isValidKey(key string) error {
 	}
 	return nil
 }
+
+// Decyphers a text using the vigenere cypher with the specified key,
+// only latin caracters are processed, the rest are ignored.
+func Decypher(cypher string, key string) (string, error) {
+	// key has to be at least 1 characters long and valid key
+	err := isValidKey(key)
+	if err != nil {
+		return "", err
+	}
+
+	text := ""
+
+	// Capitalize to remain consistent
+	key = strings.ToUpper(key)
+
+	// Start on the first index of the key
+	keyIndex := 0
+
+	for _, char := range cypher {
+		// Keep non latin letters untouched
+		if !IsLatinLetter(char) {
+			text += string(char)
+			continue
+		}
+
+		// Use the corresponding char based on the index
+		keyChar := key[keyIndex]
+
+		// Cypher current letter
+		text += string(decypherLetter(char, rune(keyChar)))
+
+		// Advance key
+		keyIndex = (keyIndex + 1) % len(key)
+	}
+
+	return text, nil
+}
+
+// Decyphers a single letter using the given key char, it is assumed that the
+// letters are latin letters and the key is in uppercase
+func decypherLetter(letter rune, keyChar rune) rune {
+	letterOffset := rune(0)
+	if IsLowercaseLatinLetter(letter) {
+		letterOffset = 97
+	} else if IsUppercaseLatinLetter(letter) {
+		letterOffset = 65
+	} else {
+		log.Fatalf("invalid letter: %v", letter)
+	}
+	adjustedLetter := (letter - letterOffset) - (keyChar - 65)
+	if adjustedLetter < 0 {
+		adjustedLetter += 26
+	}
+	return (adjustedLetter % 26) + letterOffset
+}
