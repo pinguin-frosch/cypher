@@ -12,4 +12,7 @@ func init() {
 	MainMenu.AddOption("m", "monosubstitution sub menu", func() {
 		MonoSubstitutionMenu.Start()
 	})
+	MainMenu.AddOption("p", "polisubtitution sub menu", func() {
+		PolisubstitutionMenu.Start()
+	})
 }
