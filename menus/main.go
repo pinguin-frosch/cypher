@@ -1,18 +1,24 @@
 package menus
 
-import "github.com/pinguin-frosch/menu/pkg/menu"
+import (
+	"cypher/menus/monosubstitution"
+	"cypher/menus/polisubstitution"
+	"cypher/menus/transposition"
 
-var MainMenu *menu.Menu
+	"github.com/pinguin-frosch/menu/pkg/menu"
+)
+
+var Main *menu.Menu
 
 func init() {
-	MainMenu = menu.NewMenu("main")
-	MainMenu.AddOption("t", "transposition sub menu", func() {
-		TranspositionMenu.Start()
+	Main = menu.NewMenu("main")
+	Main.AddOption("t", "transposition sub menu", func() {
+		transposition.Main.Start()
 	})
-	MainMenu.AddOption("m", "monosubstitution sub menu", func() {
-		MonoSubstitutionMenu.Start()
+	Main.AddOption("m", "monosubstitution sub menu", func() {
+		monosubstitution.Main.Start()
 	})
-	MainMenu.AddOption("p", "polisubtitution sub menu", func() {
-		PolisubstitutionMenu.Start()
+	Main.AddOption("p", "polisubstitution sub menu", func() {
+		polisubstitution.Main.Start()
 	})
 }

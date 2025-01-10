@@ -5,6 +5,5 @@ import (
 )
 
 func main() {
-	mainMenu := menus.MainMenu
-	mainMenu.Start()
+	menus.Main.Start()
 }

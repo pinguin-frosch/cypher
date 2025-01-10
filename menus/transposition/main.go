@@ -1,4 +1,4 @@
-package menus
+package transposition
 
 import (
 	"cypher/transposition"
@@ -7,17 +7,17 @@ import (
 	"github.com/pinguin-frosch/menu/pkg/menu"
 )
 
-var TranspositionMenu *menu.Menu
+var Main *menu.Menu
 
 func init() {
-	TranspositionMenu = menu.NewMenu("transposition")
-	TranspositionMenu.AddOption("b", "brute force decipher by columns", func() {
-		message := TranspositionMenu.GetString("message: ")
+	Main = menu.NewMenu("transposition")
+	Main.AddOption("cb", "brute force decipher by columns", func() {
+		message := Main.GetString("message: ")
 		transposition.BruteForceDecipher(message)
 	})
-	TranspositionMenu.AddOption("c", "cipher by columns", func() {
-		input := TranspositionMenu.GetString("text: ")
-		columnSize, err := TranspositionMenu.GetInt("columns: ")
+	Main.AddOption("cc", "cipher by columns", func() {
+		input := Main.GetString("text: ")
+		columnSize, err := Main.GetInt("columns: ")
 		if err != nil {
 			fmt.Println("error: invalid column size")
 			return
@@ -29,9 +29,9 @@ func init() {
 		}
 		fmt.Printf("cipher: %s\n", cipher)
 	})
-	TranspositionMenu.AddOption("d", "decipher by columns", func() {
-		input := TranspositionMenu.GetString("text: ")
-		columnSize, err := TranspositionMenu.GetInt("columns: ")
+	Main.AddOption("cd", "decipher by columns", func() {
+		input := Main.GetString("text: ")
+		columnSize, err := Main.GetInt("columns: ")
 		if err != nil {
 			fmt.Println("error: invalid column size")
 			return
