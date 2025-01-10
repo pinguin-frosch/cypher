@@ -42,4 +42,15 @@ func init() {
 		}
 		fmt.Printf("text: %s\n", text)
 	})
+	Main.AddOption("rb", "brute force using rotary", func() {
+		cipher := Main.GetString("cipher: ")
+		results, err := rot.BruteForce(cipher)
+		if err != nil {
+			fmt.Printf("error: %s\n", err.Error())
+			return
+		}
+		for i, result := range results {
+			fmt.Printf("rot-%d: %s\n", i+1, result)
+		}
+	})
 }

@@ -48,6 +48,20 @@ func Decipher(cipher string, amount int) (string, error) {
 	return text, nil
 }
 
+// Tries all possible rotations and returns all of them
+// latin letters are ignored
+func BruteForce(text string) ([]string, error) {
+	results := make([]string, 0, 25)
+	for i := 1; i < 26; i++ {
+		result, err := Decipher(text, i)
+		if err != nil {
+			return nil, nil
+		}
+		results = append(results, result)
+	}
+	return results, nil
+}
+
 // Rotates a single letter by the given amount, amount can be a negative value
 func rotateLetter(letter rune, amount int) rune {
 	letterOffset := 0
