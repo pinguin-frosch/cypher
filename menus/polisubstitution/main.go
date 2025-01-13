@@ -31,4 +31,7 @@ func init() {
 		}
 		fmt.Printf("text: %s\n", text)
 	})
+	Main.AddOption("va", "analysis for vigenere", func() {
+		VigenereAnalysis.Start()
+	})
 }
